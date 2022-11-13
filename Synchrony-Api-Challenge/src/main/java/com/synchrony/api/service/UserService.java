@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.synchrony.api.client.ImgurClient;
 import com.synchrony.api.controller.Controller;
 import com.synchrony.api.exception.DataNotFoundException;
 import com.synchrony.api.exception.NotAuthorizedException;
@@ -20,6 +22,10 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private ImgurClient imgurClient;
+	
+	
 	/**
 	 * 
 	 * @param userName
@@ -28,6 +34,12 @@ public class UserService {
 	 * Autenticating the user based on userName and password
 	 */
 	public UserInfo fetchUser(String userName, String password) {
+		User user = fetchAndAuthenticate(userName, password);
+		UserInfo userInfo= new UserInfo(user.getName(),user.getAge());
+		return userInfo;
+	}
+
+	private User fetchAndAuthenticate(String userName, String password) {
 		User user = userRepository.findByUserName(userName);
 		if (user == null) {
 			log.info("Data Not Found For User :" + userName);
@@ -37,8 +49,7 @@ public class UserService {
 			log.error("Username and password are not valid Please enter Correct Details");
 			throw new NotAuthorizedException("Username and password are not valid Please enter Correct Details");
 		}
-		UserInfo userInfo= new UserInfo(user.getName(),user.getAge());
-		return userInfo;
+		return user;
 	}
 	
 	/**
@@ -49,6 +60,11 @@ public class UserService {
 	public String saveUser(User user) {
 
 		return "User saved SuccessFully for " + userRepository.save(user).getName();
+	}
+
+
+	public void uploadImage(MultipartFile image) {
+		imgurClient.uploadImageToImgur(image);
 	}
 
 }

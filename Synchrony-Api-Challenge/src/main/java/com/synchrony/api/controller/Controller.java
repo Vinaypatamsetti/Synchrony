@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.synchrony.api.client.ImgurClient;
 import com.synchrony.api.model.User;
 import com.synchrony.api.model.UserInfo;
 import com.synchrony.api.service.UserService;
@@ -24,6 +26,8 @@ public class Controller {
 	
 	@Autowired
 	private UserService userService;
+	
+	
 	
 	/**
 	 * 
@@ -45,5 +49,16 @@ public class Controller {
 	public String saveUser(@RequestBody User user) {
 		return userService.saveUser(user);
 	}
-
+    
+	/**
+	 * 
+	 * @param userName
+	 * @param password
+	 * @param image
+	 */
+	@PostMapping("/uploadImage")
+	public void uploadImage(@RequestParam(name="userName",required = true) String userName,@RequestParam(name="password",required = true) String password,@RequestBody MultipartFile image) {
+		userService.fetchUser(userName, password);
+		userService.uploadImage(image);
+	}
 }

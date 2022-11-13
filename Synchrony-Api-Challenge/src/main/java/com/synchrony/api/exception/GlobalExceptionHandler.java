@@ -23,10 +23,17 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(NotAuthorizedException.class)
-	public ResponseEntity<?> InputException(NotAuthorizedException exception, WebRequest request){
+	public ResponseEntity<?> NotAuthorizedException(NotAuthorizedException exception, WebRequest request){
 		ErrorDetails errorDetails = 
 				new ErrorDetails(new Date(), exception.getMessage(), HttpStatus.UNAUTHORIZED.name());
 		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(ImgurException.class)
+	public ResponseEntity<?> ImgurException(ImgurException exception, WebRequest request){
+		ErrorDetails errorDetails = 
+				new ErrorDetails(new Date(), exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.name());
+		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	
