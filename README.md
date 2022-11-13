@@ -20,3 +20,5 @@ Sample Request body =
 http://localhost:8080/getUserBasedOnName?userName=vinay&password=vinay@123
 
 Tried to integrate Imgur api but unable to do that even from postman only upload is working and dont know where the uploaded image is stored , get image is responding with 401 status even after providing token. 
+
+Integrated Imgur Api using resttemplate and able to get the oauth token successfully and upload.
